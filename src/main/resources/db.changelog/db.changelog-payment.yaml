@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-payments-collection
+      author: nyatsko
+      labels: payments
+
+      changes:
+        - createCollection:
+            collectionName: payments
+
+        - runCommand:
+            command: |
+              {
+                "collMod": "payments",
+                "validator": {
+                  "$jsonSchema": {
+                    "bsonType": "object",
+                    "required": [
+                      "order_id",
+                      "user_id",
+                      "status",
+                      "timestamp",
+                      "payment_amount"
+                    ],
+                    "properties": {
+                      "order_id": {
+                        "bsonType": "string",
+                        "description": "Order identifier"
+                      },
+                      "user_id": {
+                        "bsonType": "string",
+                        "description": "User identifier"
+                      },
+                      "status": {
+                        "bsonType": "string",
+                        "enum": [
+                          "CREATED",
+                          "PAID",
+                          "FAILED",
+                          "CANCELLED"
+                        ]
+                      },
+                      "timestamp": {
+                        "bsonType": "date"
+                      },
+                      "payment_amount": {
+                        "bsonType": "decimal",
+                        "minimum": 0
+                      }
+                    }
+                  }
+                },
+                "validationLevel": "strict",
+                "validationAction": "error"
+              }
+
+  - changeSet:
+      id: 002-index-payments-order
+      author: nyatsko
+      changes:
+        - runCommand:
+            command: |
+              {
+                "createIndexes": "payments",
+                "indexes": [
+                  {
+                    "key": { "order_id": 1 },
+                    "name": "idx_payments_order_id"
+                  }
+                ]
+              }
+
+  - changeSet:
+      id: 003-index-payments-user
+      author: nyatsko
+      changes:
+        - runCommand:
+            command: |
+              {
+                "createIndexes": "payments",
+                "indexes": [
+                  {
+                    "key": { "user_id": 1 },
+                    "name": "idx_payments_user_id"
+                  }
+                ]
+              }
+
+  - changeSet:
+      id: 005-index-payments-user-timestamp
+      author: nyatsko
+      changes:
+        - runCommand:
+            command: |
+              {
+                "createIndexes": "payments",
+                "indexes": [
+                  {
+                    "key": {
+                      "user_id": 1,
+                      "timestamp": -1
+                    },
+                    "name": "idx_payments_user_timestamp"
+                  }
+                ]
+              }
+
