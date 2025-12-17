@@ -34,10 +34,8 @@ databaseChangeLog:
                       "status": {
                         "bsonType": "string",
                         "enum": [
-                          "CREATED",
-                          "PAID",
-                          "FAILED",
-                          "CANCELLED"
+                          "SUCCESS",
+                          "FAILED"
                         ]
                       },
                       "timestamp": {
@@ -87,7 +85,7 @@ databaseChangeLog:
               }
 
   - changeSet:
-      id: 005-index-payments-user-timestamp
+      id: 004-index-payments-user-timestamp
       author: nyatsko
       changes:
         - runCommand:
@@ -100,7 +98,7 @@ databaseChangeLog:
                       "user_id": 1,
                       "timestamp": -1
                     },
-                    "name": "idx_payments_user_timestamp"
+                    "name": "idx_payments_user_id_timestamp"
                   }
                 ]
               }
