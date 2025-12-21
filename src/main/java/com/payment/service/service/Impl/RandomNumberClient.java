@@ -11,17 +11,14 @@ import java.util.List;
 public class RandomNumberClient {
 
     private final WebClient webClient;
-    private final String baseUrl;
 
     public RandomNumberClient(WebClient.Builder builder,
                            @Value("${spring.external.random.base_url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
-        this.baseUrl = baseUrl;
     }
 
     public List<Integer> getRandomNumber() {
         return webClient.get()
-                .uri(baseUrl)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<Integer>>() {})
