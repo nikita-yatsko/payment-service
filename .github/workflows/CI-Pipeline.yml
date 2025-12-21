@@ -45,7 +45,9 @@ jobs:
 
       # Запуск тестов
       - name: Run unit tests
-        run: mvn -B test
+        env:
+          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/payment_db
+        run: mvn -B clean test
 
       # Установка Docker Buildx
       - name: Set up Docker Buildx

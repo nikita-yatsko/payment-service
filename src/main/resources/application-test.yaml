@@ -1,4 +1,8 @@
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:/db.changelog/db.changelog-payment.yaml
+    url: mongodb://localhost:27017/payment_db
   kafka:
     bootstrap-servers: ${spring.kafka.bootstrap-servers}
     admin:
