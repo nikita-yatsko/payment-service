@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class PaymentController {
     }
 
     @GetMapping("/byAny")
+    @PreAuthorize("userId == principal.id.toString() or hasRole('ADMIN')")
     public ResponseEntity<List<PaymentDto>> getPaymentsByAny(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String orderId,
@@ -37,6 +39,7 @@ public class PaymentController {
     }
 
     @GetMapping("/summary")
+    @PreAuthorize("userId == principal.id.toString() or hasRole('ADMIN')")
     public ResponseEntity<Double> getTotalSum(
             @RequestParam("userId") String userId,
             @RequestParam("from") Instant from,
@@ -45,6 +48,7 @@ public class PaymentController {
     }
 
     @GetMapping("/summary/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Double> getTotalSumAll(
             @RequestParam("from") Instant from,
             @RequestParam("to") Instant to ) {
