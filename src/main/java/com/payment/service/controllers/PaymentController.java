@@ -29,7 +29,7 @@ public class PaymentController {
     }
 
     @GetMapping("/byAny")
-    @PreAuthorize("userId == principal.id.toString() or hasRole('ADMIN')")
+    @PreAuthorize("#userId == principal.id.toString() or hasRole('ADMIN')")
     public ResponseEntity<List<PaymentDto>> getPaymentsByAny(
             @RequestParam(required = false) String userId,
             @RequestParam(required = false) String orderId,
@@ -39,7 +39,7 @@ public class PaymentController {
     }
 
     @GetMapping("/summary")
-    @PreAuthorize("userId == principal.id.toString() or hasRole('ADMIN')")
+    @PreAuthorize("#userId == principal.id.toString() or hasRole('ADMIN')")
     public ResponseEntity<Double> getTotalSum(
             @RequestParam("userId") String userId,
             @RequestParam("from") Instant from,

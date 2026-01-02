@@ -54,6 +54,13 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>7.0.2</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!--Liquibase migrations-->
 		<dependency>
 			<groupId>org.liquibase</groupId>

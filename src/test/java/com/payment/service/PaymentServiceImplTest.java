@@ -82,7 +82,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void createPayment_success_status() {
+    public void createPaymentSuccessStatus() {
         // Arrange:
         when(randomClient.getRandomNumber()).thenReturn(List.of(2));
         when(paymentMapper.createPayment(paymentRequest, statusSuccess)).thenReturn(payment);
@@ -107,7 +107,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void createPayment_failed_status() {
+    public void createPaymentFailedStatus() {
         // Arrange:
         payment.setStatus(statusFailed);
         paymentDto.setStatus(statusFailed);
@@ -135,7 +135,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void searchByAny_emptyInputs_returnsEmptyList() {
+    public void searchByAnyEmptyInputsReturnsEmptyList() {
         // Act:
         List<PaymentDto> result = paymentService.searchByAny(null, null, null);
 
@@ -147,7 +147,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void searchByAny_userIdOnly() {
+    public void searchByAnyUserIdOnly() {
         // Arrange:
         when(mongoTemplate.find(any(Query.class), eq(Payment.class))) .thenReturn(List.of(payment));
         when(paymentMapper.toPaymentDto(payment)).thenReturn(paymentDto);
@@ -164,7 +164,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void searchByAny_orderIdOnly() {
+    public void searchByAnyOrderIdOnly() {
         // Arrange:
         when(mongoTemplate.find(any(Query.class), eq(Payment.class))) .thenReturn(List.of(payment));
         when(paymentMapper.toPaymentDto(payment)).thenReturn(paymentDto);
@@ -181,7 +181,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void searchByAny_statusOnly_failed() {
+    public void searchByAnyStatusOnlyFailed() {
         // Arrange:
         paymentDto.setStatus(statusFailed);
 
@@ -200,7 +200,7 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void getTotalPaymentsByUserId_success() {
+    public void getTotalPaymentsByUserIdSuccess() {
         // Arrange:
         Payment payment1 = new Payment();
         payment1.setUserId("2");
@@ -226,13 +226,13 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void getTotalPaymentsByUserId_userNotFound() {
+    public void getTotalPaymentsByUserIdUserNotFound() {
         // Act + Assert:
         assertThrows(InvalidDataException.class, () -> paymentService.getTotalPaymentsByUserId("", null, null));
     }
 
     @Test
-    public void getTotalPaymentsForAllUsers_success() {
+    public void getTotalPaymentsForAllUsersSuccess() {
         // Arrange:
         Payment payment1 = new Payment();
         payment1.setUserId("2");

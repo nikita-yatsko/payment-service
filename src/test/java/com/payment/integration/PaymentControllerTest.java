@@ -7,6 +7,7 @@ import com.payment.service.model.dto.PaymentRequest;
 import com.payment.service.model.entity.Payment;
 import com.payment.service.model.enums.PaymentStatus;
 import com.payment.service.repository.PaymentRepository;
+import com.payment.service.security.model.CustomUserDetails;
 import org.bson.types.Decimal128;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,8 +29,10 @@ import org.wiremock.spring.InjectWireMock;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 
 
 @ActiveProfiles("test")
@@ -73,14 +79,20 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void createPayment_201_created() throws Exception {
+    public void createPaymentReturn201Created() throws Exception {
         // Given:
         PaymentRequest request = new PaymentRequest();
         request.setOrderId("1");
         request.setUserId("1");
         request.setPaymentAmount(BigDecimal.valueOf(100.0));
 
-        // WireMock
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         wireMockServer.resetAll();
 
         wireMockServer.stubFor(
@@ -94,6 +106,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/payment/create")
+                .with(authentication(auth))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)));
@@ -107,12 +120,22 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byOrderId_200_ok() throws Exception {
+    public void getPaymentsByAnyByOrderIdReturn200Ok() throws Exception {
+        // Given:
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
+                .with(authentication(auth))
                 .accept(MediaType.APPLICATION_JSON)
                 .param("orderId", "1"));
+
 
         // Then:
         result.andExpect(MockMvcResultMatchers.status().isOk())
@@ -124,10 +147,19 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byUserId_200_ok() throws Exception {
+    public void getPaymentsByAnyByUserIdReturn200Ok() throws Exception {
+        // Given:
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
+                .with(authentication(auth))
                 .accept(MediaType.APPLICATION_JSON)
                 .param("userId", "1"));
 
@@ -139,10 +171,19 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byStatus_200_ok() throws Exception {
+    public void getPaymentsByAnyByStatusReturn200Ok() throws Exception {
+        // Given:
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
+                .with(authentication(auth))
                 .accept(MediaType.APPLICATION_JSON)
                 .param("status", "SUCCESS"));
 
@@ -155,14 +196,22 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getTotalSum_200_ok() throws Exception {
+    public void getTotalSumReturn200Ok() throws Exception {
         // Given:
         Instant from = Instant.parse("2025-01-01T00:00:00Z");
         Instant to = Instant.parse("2025-12-31T23:59:59Z");
 
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/summary")
+                .with(authentication(auth))
                 .param("userId", "1")
                 .param("from", from.toString())
                 .param("to", to.toString())
@@ -175,14 +224,22 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getTotalSumAll_200_ok() throws Exception {
+    public void getTotalSumAllReturn200Ok() throws Exception {
         // Given:
         Instant from = Instant.parse("2025-01-01T00:00:00Z");
         Instant to = Instant.parse("2025-12-31T23:59:59Z");
 
+        CustomUserDetails principal = new CustomUserDetails(1, "ADMIN");
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                principal,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
+
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/summary/all")
+                .with(authentication(auth))
                 .param("from", from.toString())
                 .param("to", to.toString())
                 .accept(MediaType.APPLICATION_JSON));
