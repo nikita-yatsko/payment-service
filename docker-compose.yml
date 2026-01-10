@@ -34,7 +34,7 @@ services:
     container_name: payment-service
     restart: always
     ports:
-      - "8082:8082"
+      - "8084:8084"
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/payment_db
       SPRING_LIQUIBASE_URL: mongodb://mongodb:27017/payment_db
@@ -42,9 +42,3 @@ services:
     depends_on:
       - kafka
       - mongodb
-#    networks:
-#      - microservices-net
-
-#networks:
-#  microservices-net:
-#    external: true
