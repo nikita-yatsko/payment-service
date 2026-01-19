@@ -1,4 +1,4 @@
-package com.payment.service.service.Impl;
+package com.payment.service.service.impl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
