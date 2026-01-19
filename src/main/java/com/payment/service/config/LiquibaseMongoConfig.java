@@ -7,24 +7,32 @@ import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.ext.mongodb.database.MongoLiquibaseDatabase;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class LiquibaseMongoConfig {
 
+    @Value("${spring.liquibase.url}")
+    private String liquibaseUrl;
+
+    @Value("${spring.liquibase.change-log}")
+    private String changeLog;
+
     @Bean
+    @Profile("!test")
     public CommandLineRunner runLiquibase() {
         return args -> {
             Database database = null;
             try {
-                String url = "mongodb://localhost:27017/payment_db";
-                database = DatabaseFactory.getInstance().openDatabase(url, null, null, null, null);
+                database = DatabaseFactory.getInstance().openDatabase(liquibaseUrl, null, null, null, null);
                 if (!(database instanceof MongoLiquibaseDatabase)) {
                     throw new RuntimeException("Database is not a MongoDB instance");
                 }
-                Liquibase liquibase = new Liquibase("db.changelog/db.changelog-payment.yaml", new ClassLoaderResourceAccessor(), database);
+                Liquibase liquibase = new Liquibase(changeLog, new ClassLoaderResourceAccessor(), database);
                 liquibase.update("");
                 System.out.println("Liquibase migration applied successfully.");
             } catch (LiquibaseException e) {
