@@ -1,4 +1,4 @@
-package com.payment.service.service.Impl;
+package com.payment.service.service.impl;
 
 import com.payment.service.mapper.PaymentMapper;
 import com.payment.service.model.dto.PaymentDto;
@@ -27,10 +27,11 @@ public class PaymentServiceImpl implements PaymentService {
     private final MongoTemplate mongoTemplate;
     private final PaymentMapper paymentMapper;
     private final RandomNumberClient randomClient;
-    PaymentStatus status;
 
     @Override
     public PaymentDto createPayment(PaymentRequest request) {
+        PaymentStatus status;
+
         if (isEvenNumber() )
              status = PaymentStatus.SUCCESS;
         else
