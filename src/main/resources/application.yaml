@@ -38,3 +38,14 @@ management:
     otlp:
       tracing:
         endpoint: http://tempo:4318/v1/traces
+
+swagger:
+  servers:
+    first: http://localhost:8084
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+

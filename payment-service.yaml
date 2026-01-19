@@ -40,6 +40,8 @@ spec:
               value: "my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092"
             - name: SPRING_EXTERNAL_KAFKA_SERVER
               value: "my-kafka-kafka-bootstrap.kafka.svc.cluster.local:9092"
+            - name: SPRINGDOC.SWAGGER-UI.SERVER-URL
+              value: "http://gateway.local:8080"
           readinessProbe:
             httpGet:
               path: /actuator/health

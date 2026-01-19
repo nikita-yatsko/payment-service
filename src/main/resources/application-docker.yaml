@@ -38,3 +38,14 @@ management:
     otlp:
       tracing:
         endpoint: http://tempo:4318/v1/traces
+
+swagger:
+  servers:
+    first: http://payment-service:8084
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    server-url: http://gateway:8080
+  api-docs:
+    path: /v3/api-docs
