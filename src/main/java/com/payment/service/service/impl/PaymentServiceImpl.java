@@ -1,4 +1,4 @@
-package com.payment.service.service.Impl;
+package com.payment.service.service.impl;
 
 import com.payment.service.kafka.service.OrderStatusKafkaService;
 import com.payment.service.mapper.PaymentMapper;
