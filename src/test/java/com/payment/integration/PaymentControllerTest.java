@@ -73,7 +73,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void createPayment_201_created() throws Exception {
+    public void createPaymentReturn201Created() throws Exception {
         // Given:
         PaymentRequest request = new PaymentRequest();
         request.setOrderId("1");
@@ -107,7 +107,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byOrderId_200_ok() throws Exception {
+    public void getPaymentsByAnyByOrderIdReturn200Ok() throws Exception {
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
@@ -124,7 +124,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byUserId_200_ok() throws Exception {
+    public void getPaymentsByAnyByUserIdReturn200Ok() throws Exception {
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
@@ -139,7 +139,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getPaymentsByAny_byStatus_200_ok() throws Exception {
+    public void getPaymentsByAnyByStatusReturn200Ok() throws Exception {
         // When:
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/payment/byAny")
@@ -155,7 +155,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getTotalSum_200_ok() throws Exception {
+    public void getTotalSumReturn200Ok() throws Exception {
         // Given:
         Instant from = Instant.parse("2025-01-01T00:00:00Z");
         Instant to = Instant.parse("2025-12-31T23:59:59Z");
@@ -175,7 +175,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void getTotalSumAll_200_ok() throws Exception {
+    public void getTotalSumAllReturn200Ok() throws Exception {
         // Given:
         Instant from = Instant.parse("2025-01-01T00:00:00Z");
         Instant to = Instant.parse("2025-12-31T23:59:59Z");
