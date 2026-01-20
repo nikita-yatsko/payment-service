@@ -1,0 +1,24 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: payment-service
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/payment_db
+  liquibase:
+    enabled: true
+    change-log: classpath:/db.changelog/db.changelog-payment.yaml
+    url: mongodb://mongodb:27017/payment_db
+    driver-class-name: liquibase.ext.mongodb.database.MongoClientDriver
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration
+
+  external:
+    random:
+      base_url: http://www.randomnumberapi.com/api/v1.0/random?min=1&max=100&count=1
+    kafka:
+      server: kafka:29092
