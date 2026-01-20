@@ -1,0 +1,19 @@
+spring:
+  kafka:
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
+    admin:
+      auto-create: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  data:
+    mongodb:
+      uri: ${spring.data.mongodb.uri}
+  external:
+    kafka:
+      server: ${spring.kafka.bootstrap-servers}
+    random:
+      base_url: http://localhost:${wiremock.server.port}/api/v1.0/random?min=1&max=100&count=1
