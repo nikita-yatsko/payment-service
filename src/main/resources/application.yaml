@@ -6,7 +6,7 @@ spring:
     name: payment-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/payment_db
+      uri: ${SPRING_DATA_MONGODB_URI}
   liquibase:
     enabled: true
     change-log: classpath:/db.changelog/db.changelog-payment.yaml
