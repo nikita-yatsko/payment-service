@@ -42,3 +42,9 @@ services:
     depends_on:
       - kafka
       - mongodb
+#    networks:
+#      - microservices-net
+
+#networks:
+#  microservices-net:
+#    external: true
