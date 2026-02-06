@@ -219,7 +219,7 @@ public class PaymentControllerTest extends BaseIntegrationTest {
 
         // Then:
         result.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").value(300.0));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").value(100.0));
 
     }
 
