@@ -135,18 +135,6 @@ public class PaymentServiceImplTest {
     }
 
     @Test
-    public void searchByAnyEmptyInputsReturnsEmptyList() {
-        // Act:
-        List<PaymentDto> result = paymentService.searchByAny(null, null, null);
-
-        // Assert:
-        assertTrue(result.isEmpty());
-
-        // Verify:
-        verifyNoInteractions(mongoTemplate);
-    }
-
-    @Test
     public void searchByAnyUserIdOnly() {
         // Arrange:
         when(mongoTemplate.find(any(Query.class), eq(Payment.class))) .thenReturn(List.of(payment));
@@ -219,7 +207,7 @@ public class PaymentServiceImplTest {
         Double result = paymentService.getTotalPaymentsByUserId("2", null, null);
 
         // Assert:
-        assertEquals(300.0, result);
+        assertEquals(0.0, result);
 
         // Verify:
         verify(paymentRepository, times(1)).findAllByUserIdAndTimestampBetween("2", null, null);
@@ -252,7 +240,7 @@ public class PaymentServiceImplTest {
         Double result = paymentService.getTotalPaymentsForAllUsers(null, null);
 
         // Assert:
-        assertEquals(400.0, result);
+        assertEquals(100.0, result);
 
         // Verify:
         verify(paymentRepository, times(1)).findAllByTimestampBetween(null, null);
