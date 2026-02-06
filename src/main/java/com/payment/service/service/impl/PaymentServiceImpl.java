@@ -69,8 +69,12 @@ public class PaymentServiceImpl implements PaymentService {
         if (status != null)
             ors.add(Criteria.where("status").is(status));
 
-        if (ors.isEmpty())
-            return Collections.emptyList();
+        if (ors.isEmpty()) {
+            return mongoTemplate.findAll(Payment.class) 
+            .stream() 
+            .map(paymentMapper::toPaymentDto) 
+            .collect(Collectors.toList());
+        }
 
         Query query = new Query(new Criteria().andOperator(ors.toArray(new Criteria[0])));
 
@@ -87,6 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         return paymentRepository.findAllByUserIdAndTimestampBetween(userId, from, to)
                 .stream()
+                .filter(p -> p.getStatus() == PaymentStatus.SUCCESS)
                 .mapToDouble(p -> p.getPaymentAmount().doubleValue())
                 .sum();
     }
@@ -95,6 +100,7 @@ public class PaymentServiceImpl implements PaymentService {
     public Double getTotalPaymentsForAllUsers(Instant from, Instant to) {
         return paymentRepository.findAllByTimestampBetween(from, to)
                 .stream()
+                .filter(p -> p.getStatus() == PaymentStatus.SUCCESS)
                 .mapToDouble(p -> p.getPaymentAmount().doubleValue())
                 .sum();
     }

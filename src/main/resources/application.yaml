@@ -22,3 +22,19 @@ spring:
       base_url: http://www.randomnumberapi.com/api/v1.0/random?min=1&max=100&count=1
     kafka:
       server: localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+    otlp:
+      tracing:
+        endpoint: http://tempo:4318/v1/traces

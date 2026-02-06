@@ -1,6 +1,56 @@
-version: "3"
-
 services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - microservices-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - microservices-net
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - microservices-net
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./monitoring/promtail-config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - microservices-net
+
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yml" ]
+    volumes:
+      - ./monitoring/tempo.yml:/etc/tempo.yml
+    ports:
+      - "3200:3200"
+      - "4318:4318"
+    networks:
+      - microservices-net
+
   kafka:
     image: apache/kafka:3.7.0
     ports:
@@ -17,6 +67,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    networks:
+      - microservices-net
 
   mongodb:
     image: mongo:7.0
@@ -26,6 +78,8 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo-data:/data/db
+    networks:
+      - microservices-net
 
   payment-service:
     build:
@@ -42,9 +96,11 @@ services:
     depends_on:
       - kafka
       - mongodb
-#    networks:
-#      - microservices-net
+      - grafana
+    networks:
+      - microservices-net
 
-#networks:
-#  microservices-net:
-#    external: true
+
+networks:
+  microservices-net:
+    external: true
